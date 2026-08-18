@@ -1,7 +1,27 @@
 from django.shortcuts import render, redirect
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.contrib.auth import ( authenticate, login, logout)
 
+from .models import Product
+from .serializers import ProductSerializer
+
 # Create your views here.
+
+# product API 
+@api_view(['GET'])
+def products(request):
+    # product = Product.objects.get(id=1)  One indviusal data
+    product = Product.objects.all() #for all data
+    seralizer = ProductSerializer(product, many=True)
+    print(seralizer)
+    return Response(seralizer.data)
+
+# product page
+def product_page(request):
+    products = Product.objects.all()
+    return render(request, 'Dashboard/products.html', { 'products': products } )
+
 
 def logins(request):
 
